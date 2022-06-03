@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.Repository.TodoRepository;
-import org.example.model.TodoEntity;
+import org.example.model.TodoModel;
 import org.example.model.TodoRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,31 +23,31 @@ class TodoServiceTest {
 
     @Test
     void add() {
-        Mockito.when(this.todoRepository.save(ArgumentMatchers.any(TodoEntity.class)))
+        Mockito.when(this.todoRepository.save(ArgumentMatchers.any(TodoModel.class)))
                 .then(AdditionalAnswers.returnsFirstArg());
 
         TodoRequest ex = new TodoRequest();
         ex.setTitle("Test Title");
 
-        TodoEntity ac = this.todoService.add(ex);
+        TodoModel ac = this.todoService.add(ex);
 
         Assertions.assertEquals(ex.getTitle(), ac.getTitle());
     }
 
     @Test
     void searchById() {
-        TodoEntity entity = new TodoEntity();
+        TodoModel entity = new TodoModel();
         entity.setId(123L);
         entity.setTitle("test");
         entity.setOrder(0L);
         entity.setCompleted(false);
-        Optional<TodoEntity> optional = Optional.of(entity);
+        Optional<TodoModel> optional = Optional.of(entity);
 
         BDDMockito.given(this.todoRepository.findById(ArgumentMatchers.anyLong()))
                 .willReturn(optional);
 
-        TodoEntity ac = this.todoService.searchById(123L);
-        TodoEntity ex = optional.get();
+        TodoModel ac = this.todoService.searchById(123L);
+        TodoModel ex = optional.get();
 
         Assertions.assertEquals(ex.getId(), ac.getId());
         Assertions.assertEquals(ex.getTitle(), ac.getTitle());
